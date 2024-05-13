@@ -71,7 +71,7 @@ const App = () => {
           <div className="search-result">
             {chatHistory.map((chatItem, _index) => (
               <div key={_index}>
-                <p className="answer">{chatItem.role}: {chatItem.parts}</p>
+                <p className="answer">{chatItem.parts}</p>
               </div>
             ))}
           </div>
