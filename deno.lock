@@ -1,0 +1,34 @@
+{
+  "version": "4",
+  "specifiers": {
+    "jsr:@std/assert@1": "1.0.11",
+    "jsr:@std/internal@^1.0.5": "1.0.5"
+  },
+  "jsr": {
+    "@std/assert@1.0.11": {
+      "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
+    "@std/internal@1.0.5": {
+      "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@std/assert@1"
+    ],
+    "packageJson": {
+      "dependencies": [
+        "npm:@google/generative-ai@~0.2.1",
+        "npm:cors@^2.8.5",
+        "npm:dotenv@^16.4.7",
+        "npm:express@^4.21.2",
+        "npm:multer@^1.4.5-lts.1",
+        "npm:nodemon@^3.1.0",
+        "npm:openai@^4.28.0"
+      ]
+    }
+  }
+}
