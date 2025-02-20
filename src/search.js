@@ -1,7 +1,9 @@
 import deepSeek from "./deepseek.js";
 import openai from "./chatgpt.js";
 import googleGenerativeAI from "./gemini.js";
-import { HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+import generationConfig from "./gemini.js";
+import safetySettings from "./gemini.js";
+import llm from './llama.js';
 
 export async function semanticSearch(query) {
   try {
@@ -21,7 +23,30 @@ export async function semanticSearch(query) {
     });
     console.log(completion.choices[0].message.content);
     return JSON.parse(completion.choices[0].message.content);
-    //return completion.choices[0].message.content;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function llamaSemanticSearch(query) {
+  try {
+    const { message, model } = query;
+
+    console.log(`Running Llama Open AI model ${model}`);
+
+    const completion = await llm.chat.completions.create({
+        model,
+        messages: [
+          {
+            role: "system",
+            content: "You are a powerful search engine. Return concise, factual answers.",
+          },
+          { role: "user", content: message },
+        ],
+        temperature: 0.3,
+        max_tokens: 150,
+      });
+      console.log(completion.choices[0].message.content);
+      return completion.choices[0].message.content;
   } catch (error) {
     console.error("Search error:", error.message);
     throw error;
@@ -30,28 +55,6 @@ export async function semanticSearch(query) {
 
 export async function geminiSemanticSearch(query) {
   try {
-    //  const generationConfig = {
-    //  stopSequences: ["red"],
-    //  maxOutputTokens: 200,
-    //  temperature: 0.9,
-    //  topP: 0.1,
-    //     topK: 16,
-    //  };
-
-    // const safetySettings = [
-    // {
-    //   category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    //   threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-    // },
-    // {
-    //   category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-    //   threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    // },
-    // {
-    //   category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-    //   threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-    // },
-    // ];
 
     const { history, message, model } = query;
 
@@ -59,39 +62,12 @@ export async function geminiSemanticSearch(query) {
 
     console.log(message);
 
-    // const { totalTokens } = await model.countTokens({ history, message });
-    // console.log(totalTokens);
-
-    //   const result = await chat.sendMessage(message);
-    //   const response = await result.response;
-    //   const text = await response.text();
-    //   res.json({parts: text});
-
-    // const gemini =
-    //  googleGenerativeAI.getGenerativeModel({ model: model}, generationConfig, safetySettings);
-    const gemini = googleGenerativeAI.getGenerativeModel({ model: model });
+    const gemini = googleGenerativeAI.getGenerativeModel({ model: model }, generationConfig, safetySettings);
     console.log(`Running Gemini model ${model}`);
 
     const result = await gemini.generateContent(message);
     console.log(result.response.text());
     return result.response.text();
-    //   const completion = await gemini.chat.completions.create({
-    //     model,
-    //     messages: [
-    //       {
-    //         role: "system",
-    //         content: "You are a powerful search engine. Return concise, factual answers."
-    //       },
-    //       { role: "user", content: query.message }
-    //     ],
-    //     temperature: 0.3,
-    //     max_tokens: 150
-    //   });
-
-    //   console.log(completion.choices[0].message.content);
-    //  const result = await gemini.generateContent(message);
-    //   return JSON.parse(result);
-    //return completion.choices[0].message.content;
   } catch (error) {
     console.error("Search error:", error.message);
     throw error;

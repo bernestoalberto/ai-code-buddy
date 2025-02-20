@@ -11,6 +11,7 @@ const PORT = 8000;
 import { analyzeData } from "./src/analyze.js";
 import { semanticSearch } from "./src/search.js";
 import { geminiSemanticSearch, openAISemanticSearch } from "./src/search.js";
+import { llamaSemanticSearch } from "./src/search.js";
 
 // Multer Configuration
 const storage = multer.diskStorage({
@@ -43,10 +44,46 @@ app.post("/uploadImage", upload.array("image"), (req, res) => {
     res.send("Image uploaded successfully!");
   }
 });
-
+app.post('/setCustomClaims', async (req, res) => {
+    // Get the ID token passed.
+    const idToken = req.body.idToken;
+  
+    // Verify the ID token and decode its payload.
+    const claims = await getAuth().verifyIdToken(idToken);
+  
+    // Verify user is eligible for additional privileges.
+    if (
+      typeof claims.email !== 'undefined' &&
+      typeof claims.email_verified !== 'undefined' &&
+      claims.email_verified &&
+      claims.email.endsWith('@admin.example.com')
+    ) {
+      // Add custom claims for additional privileges.
+      await getAuth().setCustomUserClaims(claims.sub, {
+        admin: true
+      });
+  
+      // Tell client to refresh token on user.
+      res.end(JSON.stringify({
+        status: 'success'
+      }));
+    } else {
+      // Return nothing.
+      res.end(JSON.stringify({ status: 'ineligible' }));
+    }
+  });
+  app.post("/llama", async (req, res) => {
+    try {
+      const result = await llamaSemanticSearch(req.body.query);
+      console.log({ result });
+      res.json({ result });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 app.post("/gemini", async (req, res) => {
   try {
-    const result = await geminiSemanticSearch(req.body);
+    const result = await geminiSemanticSearch(req.body.query);
     console.log({ result });
     res.json({ result });
   } catch (error) {
@@ -55,7 +92,7 @@ app.post("/gemini", async (req, res) => {
 });
 app.post("/openai", async (req, res) => {
   try {
-    const result = await openAISemanticSearch(req.body);
+    const result = await openAISemanticSearch(req.body.query);
     console.log({ result });
     res.json({ result });
   } catch (error) {
@@ -65,7 +102,6 @@ app.post("/openai", async (req, res) => {
 });
 
 app.post("/search", async (req, res) => {
-  console.log(req.body.query);
   try {
     const result = await semanticSearch(req.body.query);
     console.log({ result });

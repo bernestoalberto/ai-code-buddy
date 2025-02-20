@@ -1,5 +1,6 @@
 import deepSeek from "./deepseek.js";
 import { config } from "dotenv";
+import process from "node:process";
 
 config();
 export async function analyzeData(text) {
