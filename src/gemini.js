@@ -1,10 +1,11 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
+import { Buffer } from "node:buffer";
 import process from "node:process";
+import fs from "node:fs";
 
 const googleGenerativeAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-import fs from "fs";
-import { Buffer } from "node:buffer";
+
 
 export default googleGenerativeAI;
 
