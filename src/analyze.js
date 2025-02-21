@@ -1,8 +1,10 @@
 import deepSeek from "./deepseek.js";
-import { config } from "dotenv";
 import process from "node:process";
+import dotenv from "dotenv";
+ 
+dotenv.config();
 
-config();
+
 export async function analyzeData(text) {
   try {
     console.log(`Running AI model ${process.env.DEEPSEEK_MODEL}`);

@@ -1,10 +1,10 @@
 import OpenAI from "openai";
-import { config } from "dotenv";
 import process from "node:process";
 import os from 'node:os';
+import dotenv from "dotenv";
  
 
-config();
+dotenv.config();
 
   
   // Create an instance of ChatOpenAI with your custom configuration

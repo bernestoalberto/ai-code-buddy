@@ -1,8 +1,8 @@
 import OpenAI from "openai";
-import { config } from "dotenv";
 import process from "node:process";
+import dotenv from "dotenv";
+dotenv.config();
 
-config();
 const openai = new OpenAI({
   apiKey: process.env.OPEN_AI_API_KEY,
 });

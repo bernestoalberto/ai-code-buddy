@@ -1,10 +1,11 @@
 import OpenAI from "openai";
-import { config } from "dotenv";
 import process from "node:process";
 import os from 'node:os';
+import dotenv from "dotenv";
  
 
-config();
+dotenv.config();
+
 const deepSeek = new OpenAI({
   baseURL: os.platform() === "win32" 
     ?  process.env.DEEPSEEK_REMOTE_BASE_URL
