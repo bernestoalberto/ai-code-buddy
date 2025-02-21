@@ -6,10 +6,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const deepSeek = new OpenAI({
+export const deepSeek = new OpenAI({
   baseURL: os.platform() === "win32" 
     ?  process.env.DEEPSEEK_REMOTE_BASE_URL
     :  process.env.DEEPSEEK_LOCAL_BASE_URL,
   apiKey: process.env.DEEPSEEK_API_KEY,
 });
-export default deepSeek;

@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 
 import multer from 'multer';
 
@@ -8,14 +9,13 @@ const PORT = 8000;
 
 // Loading modules
 
-import { analyzeData } from './src/analyze.ts';
-import bodyParser from 'body-parser';
+import { analyzeData } from './analyze.js';
 import {
   semanticSearch,
   geminiSemanticSearch,
   openAISemanticSearch,
   llamaSemanticSearch,
-} from './src/search.ts';
+} from './search.js';
 
 // Multer Configuration
 const storage = multer.diskStorage({
@@ -44,9 +44,7 @@ const upload = multer({ storage: storage });
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors());
-// parse application/json
-app.use(bodyParser.json());
-// app.use(express.json()); // Middleware for parsing JSON request bodies
+app.use(bodyParser.json()); // Middleware for parsing JSON request bodies
 
 app.post(
   '/uploadImage',

@@ -6,11 +6,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const googleGenerativeAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-
-
-export default googleGenerativeAI;
+const apiKey = process.env.GEMINI_API_KEY;
+if (!apiKey) {
+  throw new Error("GEMINI_API_KEY is not defined in the environment variables");
+}
+export const googleGenerativeAI = new GoogleGenerativeAI(apiKey);
 
 export const generationConfig = {
     stopSequences: ["red"],
@@ -18,8 +18,8 @@ export const generationConfig = {
     temperature: 0.9,
     topP: 0.1,
     topK: 16,
-  };
-  export const safetySettings = [
+};
+export const safetySettings = [
     {
       category: HarmCategory.HARM_CATEGORY_HARASSMENT,
       threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
@@ -34,7 +34,7 @@ export const generationConfig = {
     },
   ];
 
-function fileToGenerativePart(path, mimeType) {
+function fileToGenerativePart(path: fs.PathOrFileDescriptor, mimeType: string) {
     return {
       inlineData: {
         data: Buffer.from(fs.readFileSync(path)).toString("base64"),
@@ -43,17 +43,17 @@ function fileToGenerativePart(path, mimeType) {
     };
   }
 
-  async function textOnly() {
-    const prompt = "I hate wokeness"
+//   async function textOnly() {
+//     const prompt = "I hate wokeness"
   
-    const result = await model.generateContent(prompt, generationConfig);
-    const response = await result.response;
-    const text = response.text();
-    console.log(text);
-  }
+//     const result = await model.generateContent(prompt, generationConfig);
+//     const response = await result.response;
+//     const text = response.text();
+//     console.log(text);
+//   }
 
-  async function textToImage() {
-    model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+async function textToImage() {
+    const model = googleGenerativeAI.getGenerativeModel({ model: "gemini-pro-vision" });
   
     const prompt = "What's different between these pictures?";
   
@@ -71,16 +71,16 @@ const { totalTokens } = await model.countTokens([prompt, ...imageParts]);
     console.log(totalTokens);
   }
 
-  async function embedding() {
-    // For embedding, use the embedding-001 model
-    // For text-only input
-    model = genAI.getGenerativeModel({ model: "embedding-001"});
+//   async function embedding() {
+//     // For embedding, use the embedding-001 model
+//     // For text-only input
+//     model = genAI.getGenerativeModel({ model: "embedding-001"});
   
-    const text = "The brother love to help his sister."
+//     const text = "The brother love to help his sister."
   
-    const result = await model.embedContent(text);
-    const embedding = result.embedding;
-    console.log(embedding.values);
-  }
+//     const result = await model.embedContent(text);
+//     const embedding = result.embedding;
+//     console.log(embedding.values);
+//   }
 
   

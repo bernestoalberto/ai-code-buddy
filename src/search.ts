@@ -1,11 +1,9 @@
-import deepSeek from "./deepseek.js";
-import openai from "./chatgpt.js";
-import googleGenerativeAI from "./gemini.js";
-import generationConfig from "./gemini.js";
-import safetySettings from "./gemini.js";
-import llm from './llama.js';
+import { deepSeek } from "./deepseek.js";
+import { openai } from "./chatgpt.js";
+import { googleGenerativeAI } from "./gemini.js";
+import { llm } from './llama.js';
 
-export async function semanticSearch(query) {
+export async function semanticSearch(query: { message: any; model: any; }) {
   try {
     const { message, model } = query;
     console.log(`Running Deep Seek AI model ${model}`);
@@ -21,13 +19,18 @@ export async function semanticSearch(query) {
       temperature: 0.3,
       max_tokens: 150,
     });
-    console.log(completion.choices[0].message.content);
-    return JSON.parse(completion.choices[0].message.content);
-  } catch (error) {
+    const content = completion.choices[0].message.content;
+    if (content) {
+      console.log(completion.choices[0].message.content);
+      return JSON.parse(content);
+    } else {
+      throw new Error("Completion content is null");
+    }
+  } catch(error:any) {
     throw error;
   }
 }
-export async function llamaSemanticSearch(query) {
+export async function llamaSemanticSearch(query: { message: any; model: any; }) {
   try {
     const { message, model } = query;
 
@@ -47,13 +50,13 @@ export async function llamaSemanticSearch(query) {
       });
       console.log(completion.choices[0].message.content);
       return completion.choices[0].message.content;
-  } catch (error) {
+  } catch(error:any) {
     console.error("Search error:", error.message);
     throw error;
   }
 }
 
-export async function geminiSemanticSearch(query) {
+export async function geminiSemanticSearch(query: { query?: any; history?: any; message?: any; model?: any; }) {
   try {
 
     const { history, message, model } = query;
@@ -62,18 +65,18 @@ export async function geminiSemanticSearch(query) {
 
     console.log(message);
 
-    const gemini = googleGenerativeAI.getGenerativeModel({ model: model }, generationConfig, safetySettings);
+    const gemini = googleGenerativeAI.getGenerativeModel(model);
     console.log(`Running Gemini model ${model}`);
 
     const result = await gemini.generateContent(message);
     console.log(result.response.text());
     return result.response.text();
-  } catch (error) {
+  } catch(error:any) {
     console.error("Search error:", error.message);
     throw error;
   }
 }
-export async function openAISemanticSearch(query) {
+export async function openAISemanticSearch(query: { model: any; message: any; }) {
   try {
     const { model, message } = query;
     console.log(`Running  Open AI model ${model}`);
@@ -103,7 +106,7 @@ export async function openAISemanticSearch(query) {
     });
     console.log(completion.choices[0].message.content);
     return completion.choices[0].message.content;
-  } catch (error) {
+  } catch(error:any) {
     console.error("Search error:", error.cause.message + ":" + error.message);
     //   throw error;
     return error.message;
