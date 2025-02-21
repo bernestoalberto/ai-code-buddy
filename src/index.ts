@@ -3,8 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 
 import multer from 'multer';
-
-const app = express();
+const singleUpload = multer().single('avatar');
 const PORT = 8000;
 
 // Loading modules
@@ -35,21 +34,32 @@ const storage = multer.diskStorage({
   },
 });
 // Multer Setup (For handling file uploads)
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 // const upload = multer({ dest: 'uploads/' });
 
 // Middleware
+const app = express();
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cors());
 app.use(bodyParser.json()); // Middleware for parsing JSON request bodies
+app.post('/profile', upload.single('avatar'), function (req, res, next) {
+  singleUpload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      // A Multer error occurred when uploading.
+    } else if (err) {
+      // An unknown error occurred when uploading.
+    }
 
+    // Everything went fine.
+  });
+});
 app.post(
-  '/uploadImage',
-  upload.array('image'),
-  (req: { body: { file: File; query: any } }, res: any) => {
+  '/photos/upload',
+  upload.array('photos', 12),
+  (req: { body: { file: File; query: any } }, res: any, next: any) => {
     if (!req.body.file) {
       res.status(400).send('Error: No file uploaded.');
     } else {
