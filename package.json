@@ -5,26 +5,26 @@
   "author": "Ernesto Bonet",
   "type": "module",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.62.0",
-    "@genkit-ai/googleai": "^1.19.2",
+    "@anthropic-ai/sdk": "^0.80.0",
+    "@genkit-ai/googleai": "^1.28.0",
     "@google/generative-ai": "^0.24.1",
-    "@langchain/core": "^0.3.76",
-    "@langchain/openai": "^0.6.12",
+    "@langchain/core": "^0.3.80",
+    "@langchain/openai": "^0.6.17",
     "@lmstudio/sdk": "^1.5.0",
     "@types/body-parser": "^1.19.6",
     "@xenova/transformers": "^2.17.2",
-    "cors": "^2.8.5",
-    "discord.js": "^14.22.1",
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0",
-    "firebase-admin": "^13.5.0",
-    "langchain": "^0.3.34",
-    "multer": "^2.0.2",
-    "nodemon": "^3.1.10",
+    "cors": "^2.8.6",
+    "discord.js": "^14.25.1",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "firebase-admin": "^13.7.0",
+    "langchain": "^0.3.37",
+    "multer": "^2.1.1",
+    "nodemon": "^3.1.14",
     "ollama": "^0.5.18",
-    "openai": "^5.20.3",
-    "sharp": "^0.34.3",
-    "zod": "^4.1.8"
+    "openai": "^5.23.2",
+    "sharp": "^0.34.5",
+    "zod": "^4.3.6"
   },
   "scripts": {
     "serve": "node --experimental-transform-types src/index.ts",
@@ -33,11 +33,11 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
-    "@types/multer": "^2.0.0",
-    "@types/node": "^24.5.0",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^24.12.0",
     "helmet": "^8.1.0",
-    "prettier": "3.6.2",
-    "typescript": "^5.9.2"
+    "prettier": "3.8.1",
+    "typescript": "^5.9.3"
   }
 }
